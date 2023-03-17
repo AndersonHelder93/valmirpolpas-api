@@ -1,19 +1,24 @@
 package com.valmirpolpas.api.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_user")
 public class Users implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -21,7 +26,11 @@ public class Users implements Serializable {
 	private String email;
 	private String phone;
 	private String password;
-	
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<>();
+
 	public Users() {
 	}
 
@@ -74,6 +83,10 @@ public class Users implements Serializable {
 		this.password = password;
 	}
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -90,6 +103,5 @@ public class Users implements Serializable {
 		Users other = (Users) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
+
 }

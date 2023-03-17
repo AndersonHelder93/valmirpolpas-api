@@ -2,10 +2,14 @@ package com.valmirpolpas.api.resources;
 
 
 import com.valmirpolpas.api.entities.Users;
+import com.valmirpolpas.api.services.UserService;
 
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,9 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/users")
 public class UserResource {
 	
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping
-	public ResponseEntity<Users> findAll(){
-		Users user = new Users(1L, "Maria", "maria@gmail.com", "999999", "12345");
-		return ResponseEntity.ok().body(user);
+	public ResponseEntity<List<Users>> findAll(){
+		List<Users> list = userService.findAll();
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<Users> findById(@PathVariable Long id){
+		Users obj = userService.findById(id);
+		return ResponseEntity.ok().body(obj);
 	}
 }
